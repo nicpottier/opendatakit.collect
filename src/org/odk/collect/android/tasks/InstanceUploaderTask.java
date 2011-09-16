@@ -158,7 +158,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             // we need authentication, so stop and return what we've
                             // done so far.
                             mAuthRequestingServer = u;
-                        } else if (statusCode == 204) {
+                        } else if (statusCode == 201 || statusCode == 202 || statusCode == 204) {
                             Header[] locations = response.getHeaders("Location");
                             if (locations != null && locations.length == 1) {
                                 try {
@@ -211,7 +211,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, HashMap<Strin
                             }
 
                             Log.w(t, "Status code on Head request: " + statusCode);
-                            if (statusCode >= 200 && statusCode <= 299) {
+                            if (statusCode == 200 || (statusCode > 202 && statusCode <= 299)) {
                                 mResults.put(id, fail + "network login? ");
                                 cv.put(InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
