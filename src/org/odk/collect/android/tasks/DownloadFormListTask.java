@@ -233,6 +233,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             // populate HashMap with form names and urls
             Element formsElement = result.doc.getRootElement();
             int formsCount = formsElement.getChildCount();
+            String formId = null;            
             for (int i = 0; i < formsCount; ++i) {
                 if (formsElement.getType(i) != Element.ELEMENT) {
                     // whitespace
@@ -240,7 +241,6 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                 }
                 Element child = formsElement.getElement(i);
                 String tag = child.getName();
-                String formId = null;
                 if (tag.equals("formID")) {
                     formId = XFormParser.getXMLText(child, true);
                     if (formId != null && formId.length() == 0) {
@@ -270,6 +270,9 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         return formList;
                     }
                     formList.put(formId, new FormDetails(formName, downloadUrl, null, formId));
+                    
+                    // reset our form id
+                    formId = null;
                 }
             }
         }
